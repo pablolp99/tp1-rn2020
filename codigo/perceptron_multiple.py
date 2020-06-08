@@ -56,4 +56,4 @@ def train(xp, w, z, l, s, lr, epsilon, max_epoch):
 			epoch += 1
 			pbar.update(1)
 			pbar.set_description("Error: {}".format(round(error,3)))
-	return w
+	return w, error
