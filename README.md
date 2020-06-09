@@ -12,7 +12,6 @@ Ejecutar el codigo. Se puede ejecutar en modo verbose con info o debug
 
 
 ### TODO:
-  - Hacer que seleccione un ejercicio desde consola
-  - Nombre del modelo por consola
-  - Nombre de los datasets por consola
+  - <del>Hacer que seleccione un ejercicio desde consola</del>
+  - <del>Nombre del modelo por consola</del>
   - Terminar el informe ASAP
