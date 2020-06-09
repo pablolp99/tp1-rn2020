@@ -2,3 +2,5 @@ codigo/.ipynb_checkpoints/*
 codigo/.ipynb_checkpoints/*
 codigo/dev.ipynb
 codigo/__pycache__
+img/
+model/*
