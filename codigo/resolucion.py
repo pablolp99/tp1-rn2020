@@ -13,58 +13,78 @@ from utils import *
 warnings.filterwarnings('ignore')
 
 def ej1(filename, model_name):
-	logi("Starting Exercise 1")
-	logi("Reading Data")
+	try:
+		w = load_model(filename=model_name+'_ex1.pkl')
+		logi("Activating data with pre-trained model")
+		data = pd.read_csv(filename, header=None)
+		data = normalize(data, -1, 1)
+		s = [10,10,10,1]
+		xp = activation(data[list(range(1,11))],w,len(s),s)
+		logi("Saving results in {}".format('testing_ej1_{}.csv'.format(model_name.split('/')[-1])))
+		pd.DataFrame(xp[-1], columns=['value']).to_csv('../data/testing_ej1_{}.csv'.format(model_name.split('/')[-1]))
 
-	data = pd.read_csv(filename, header=None)
-	data = normalize(data, -1, 1)
-	# data = data.sample(int(len(data)*0.8))
+	except FileNotFoundError as e:
+		logi("Model not found. Starting Exercise 1")
+		logi("Reading Data")
 
-	x = data[list(range(1,11))].to_numpy()
-	z = np.array(data.result.tolist())
+		data = pd.read_csv(filename, header=None)
+		data = normalize(data, -1, 1)
+		# data = data.sample(int(len(data)*0.8))
 
-	learning_rate = 10e-3 * 3
-	epsilon = 0.001
-	max_epoch = 2000
+		x = data[list(range(1,11))].to_numpy()
+		z = np.array(data.result.tolist())
 
-	s = [10,10,10,1]
-	l = len(s)
-	w = [0] + [np.random.normal(0, s[0]**(0.5), (s[i-1]+1, s[i])) for i in range(1, l)]	
+		learning_rate = 10e-3 * 3
+		epsilon = 0.001
+		max_epoch = 2000
 
-	logi("LEARNING_RATE: {0}; EPSILON: {1}; MAX_EPOCH: {2}".format(learning_rate, epsilon, max_epoch))
-	logi("Architecture: {0}; # Hidden Layers: {1}; # Training data: {2}".format(s,l-2,len(x)))
+		s = [10,10,10,1]
+		l = len(s)
+		w = [0] + [np.random.normal(0, s[0]**(0.5), (s[i-1]+1, s[i])) for i in range(1, l)]	
 
-	w, error = train(x, w, z, l, s, learning_rate, epsilon, max_epoch)
+		logi("LEARNING_RATE: {0}; EPSILON: {1}; MAX_EPOCH: {2}".format(learning_rate, epsilon, max_epoch))
+		logi("Architecture: {0}; # Hidden Layers: {1}; # Training data: {2}".format(s,l-2,len(x)))
 
-	save_model(w, model_name+"_ex1.pkl")
-	return
+		w, error = train(x, w, z, l, s, learning_rate, epsilon, max_epoch)
+
+		save_model(w, model_name+"_ex1.pkl")
 
 def ej2(filename, model_name):
-	logi("Starting Exercise 2")
-	logi("Reading Data")
-	data = pd.read_csv(filename, header=None)
-	for c in data.columns:
-		data[c] = skl.minmax_scale(data[c], feature_range=(-1, 1))
+	try:
+		w = load_model(filename=model_name+"_ex2.pkl")
+		logi("Activating data with pre-trained model")
+		data = pd.read_csv(filename, header=None)
+		for c in data.columns:
+			data[c] = skl.minmax_scale(data[c], feature_range=(-1, 1))
+		s = [8,8,8,1]
+		xp = activation(data[list(range(0,8))],w,len(s),s)
+		logi("Saving results in {}".format('testing_ej2_{}.csv'.format(model_name.split('/')[-1])))
+		pd.DataFrame(xp[-1], columns=['r1','r2']).to_csv('../data/testing_ej2_{}.csv'.format(model_name.split('/')[-1]))
 
-	x = data[list(range(0,8))].to_numpy()
-	z = data[list(range(8,10))].to_numpy()
+	except FileNotFoundError as e:
+		logi("Starting Exercise 2")
+		logi("Reading Data")
+		data = pd.read_csv(filename, header=None)
+		for c in data.columns:
+			data[c] = skl.minmax_scale(data[c], feature_range=(-1, 1))
 
-	learning_rate = 10e-3 * 6
-	epsilon = 0.0001
-	max_epoch = 2000
+		x = data[list(range(0,8))].to_numpy()
+		z = data[list(range(8,10))].to_numpy()
 
-	logi("LEARNING_RATE: {0}; EPSILON: {1}; MAX_EPOCH: {2}".format(learning_rate, epsilon, max_epoch))
-	logi("Architecture: {0}; # Hidden Layers: {1}; # Training data: {2}".format(s,l-2,len(x)))
-	
-	s = [8,8,8,2]
-	l = len(s) # Cantidad de capas
-	w = [0] + [np.random.normal(0, s[0]**(0.5), (s[i-1]+1, s[i])) for i in range(1, l)]
-	w, error = train(x, w, z, l, s, learning_rate, epsilon, max_epoch)
+		learning_rate = 10e-3 * 6
+		epsilon = 0.0001
+		max_epoch = 2000
 
+		s = [8,8,8,2]
+		l = len(s) # Cantidad de capas
+		w = [0] + [np.random.normal(0, s[0]**(0.5), (s[i-1]+1, s[i])) for i in range(1, l)]
+		
+		logi("LEARNING_RATE: {0}; EPSILON: {1}; MAX_EPOCH: {2}".format(learning_rate, epsilon, max_epoch))
+		logi("Architecture: {0}; # Hidden Layers: {1}; # Training data: {2}".format(s,l-2,len(x)))
+		
+		w, error = train(x, w, z, l, s, learning_rate, epsilon, max_epoch)
 
-	save_model(w, model_name+"_ex2.pkl")
-	return
-
+		save_model(w, model_name+"_ex2.pkl")
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser()
