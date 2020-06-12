@@ -23,4 +23,4 @@ Estos flags pueden ser combinados.
 ### TODO:
   - <del>Hacer que seleccione un ejercicio desde consola</del>
   - <del>Nombre del modelo por consola</del>
-  - Terminar el informe ASAP
+  - <del>Terminar el informe ASAP</del>
